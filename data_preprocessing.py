@@ -7,7 +7,7 @@
 import numpy as np
 from keras.models import Sequential 
 from keras.layers import Dense
-from keras.datasets import fashion_mnist # 사용할 dataset
+from keras.datasets import fashion_mnist
 from keras.utils import to_categorical
 from keras.optimizers import SGD, Adam, RMSprop
 

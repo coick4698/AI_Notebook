@@ -156,9 +156,62 @@ def insertion_sort(arr):
 
 # Merge Sort(병합 정렬) ----------------------------------------------------------
 """
-
+    - 배열을 계속 반으로 나눈 뒤, 정렬된 작은 배열을 병합하여 전체를 정렬하는 알고리즘
+    *** 반으로 나누고, 정렬하면서 다시 합친다 ***
+    - Divide and Conquer (분할 정복)를 사용
+    
+    ex)
+    arr = [8,3,5,1]
+    Divide:
+    [8,3],[5,1] --> 반으로 나눔
+    [8],[3],[5],[1] --> 원소가 1개인 배열은 이미 정렬된 상태!
+    Merge:
+    [3,8][1,5] --> 한개짜리 원소들을 비교하여 두개인 리스트로 순서대로 병합시킴
+    [1,3,5,8] --> 차례차례 두 리스트의 원소들을 비교하면서 병합시킴
+    
+    Time Complexity:
+    - Best    : O(N log N)
+    - Average : O(N log N)
+    - Worst   : O(N log N)
+    
+    병합 정렬을 떠올려야 할 때:
+    - O(NlogN) 정렬이 필요한 경우
+    - Divide and Conquer를 사용하라는 문제
+    - 정렬된 두 배열을 효율적으로 합쳐야할 때
+    - Inversion Counting(역전쌍 계산)
 """
 
+def merge_sort(arr):
+    n = len(arr) # arr의 길이
+    
+    if n <= 1: # Base Case(arr의 원소가 하나라면 정렬된 상태니까)
+        return arr # 바로 반환
+    
+    # Divide Part
+    mid = n // 2
+    left = merge_sort(arr[:mid]) # 재귀
+    right = merge_sort(arr[mid:])
+    
+    # Merge Part
+    result = [] # 원소를 하나씩 넣을 빈 리스트
+    i,j = 0,0 # left,right 배열의 인덱스
+    
+    while i < len(left) and j < len(right): # 인덱스 i,j가 각 배열의 끝까지 순환할 때까지
+        
+        if left[i] <= right[j]: # 만약 왼쪽 배열이 더 작으면
+            result.append(left[i]) # 더 작은 값을 결과 리스트에 저장
+            i += 1 # left 배열의 다음 원소로 인덱스 이동
+            
+        else: # 오른쪽 배열의 원소가 더 작다면
+            result.append(right[j]) # 오른쪽 배열의 원소를 결과 리스트에 저장
+            j += 1 # right 배열의 다음 원소로 인덱스 이동
+    
+    # 남은 원소를 모두 추가(한쪽의 원소들만 계속 result에 추가됐다면 반대 리스트에는 원소들이 남아있으니까)
+    result.extend(left[i:])
+    result.extend(right[j:])
+    
+    return result # 정렬되어 병합된 arr 반환
+    
 # Quick Sort(퀵 정렬) ------------------------------------------------------------
 """
 

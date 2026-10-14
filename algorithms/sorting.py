@@ -214,9 +214,52 @@ def merge_sort(arr):
     
 # Quick Sort(퀵 정렬) ------------------------------------------------------------
 """
-
+    - Pivot(기준값)을 선택한 뒤, 작은 값과 큰 값을 분리하여 재귀적으로 정렬하는 알고리즘
+    *** Pivot을 기준으로 분할하고 양쪽을 각각 정렬한다***
+    - Divide and Conquer를 사용한다.
+    
+    ex)
+    arr = [5,2,8,1,7,3]
+    Pivot = 5
+    Pivot보다 작은 값 = [2,1,3]
+    Pivot보다 큰 값 = [8,7]
+    분할 결과: [2,1,3]+[5]+[8,7]
+    분할된 각 배열에 다시 재귀적으로 퀵 정렬 적용
+    quick_sort([2,1,3]) --> [1,2,3]
+    quick_sort([8,7]) --> [7,8]
+    최종: [1,2,3,5,7,8]
+    
+    Time Complexity:
+    - Best    : O(N log N) # Pivot이 매번 배열을 절반씩 나눌 경우(logN) * 각 단계의 파티션 작업(N)
+    - Average : O(N log N) # Pivot을 매번 최대/최솟값으로 선택할 경우(N) * 각 단계의 파티션 작업(N)
+    - Worst   : O(N^2)
+    
+    퀵 정렬을 떠올릴 수 있는 상황:
+    - Pivot을 기준으로 데이터를 분할하는 문제
+    - Partition 개념을 활용하는 문제
+    - K번째 작은 값을 찾는 문제
 """
 
+def quick_sort(arr):
+    n = len(arr) # n은 arr의 길이
+    
+    if len(arr) <= 1: # Base Case: arr의 원소가 하나라면 즉시 반환
+        return arr
+    
+    pivot = arr[0] # 피봇은 arr의 첫번째 요소
+    
+    # Partition
+    left = [] # 피봇보다 작은 값들이 들어갈 리스트
+    right = [] # 피봇보다 큰 값들이 들어갈 리스트
+    
+    for x in arr[1:]: # 피봇 다음 요소부터 리스트 끝까지 순환하면서 체크
+        if x <= pivot: # 피봇보다 작은 값이면
+            left.append(x) # left 리스트에 삽입
+        
+        else: # 피봇보다 큰 값이면
+            right.append(x) # right 리스트에 삽입
+    
+    return quick_sort(left) + [pivot] + quick_sort(right) # 분할된 리스트들을 대상으로 재귀적으로 퀵 정렬을 실행하여 합친 후 반환
 # Heap Sort(힙 정렬) -------------------------------------------------------------
 """
 

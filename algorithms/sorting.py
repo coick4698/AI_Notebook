@@ -262,8 +262,85 @@ def quick_sort(arr):
     return quick_sort(left) + [pivot] + quick_sort(right) # 분할된 리스트들을 대상으로 재귀적으로 퀵 정렬을 실행하여 합친 후 반환
 # Heap Sort(힙 정렬) -------------------------------------------------------------
 """
-
+    - 완전이진 트리 구조로 최댓값 또는 최솟값을 반복적으로 추출하는 정렬 알고리즘
+    ***최대 힙을 만들고 최댓값을 배열 뒤쪽에 배치한다***
+    
+    [Heap의 특징]
+    - Complete Binary Tree
+    - 부모와 자식 사이의 대소 관계를 유지한다
+    - 전체 배열이 정렬되어 있는 것은 아니다
+    
+    [Heap의 종류]
+    1. Max Heap
+    - 부모 노드 >= 자식 노드
+    - 루트 노드는 전체 최댓값
+    2. Min Heap
+    - 부모 노드 <= 자식노드
+    - 루트 노드는 전체 최솟값
+    
+    ex)
+    arr = [4,10,3,5,1]
+    Max Heap: [10,5,3,4,1]
+    Heap Sort:
+    [10,5,3,4,1] --> 루트 노드인 10을 마지막 1과 교환
+    [1,5,3,4 | 10] --> 10 정렬 완료
+    정렬되지 않은 영역을 Heapify:
+    [5,4,3,1 | 10] --> 루트 노드인 5를 마지막 1과 교환
+    [1,4,3 | 5,10] --> 5 정렬 완료
+    정렬되지 않은 영역을 Heapify: 
+    [4,3,1 | 5,10] --> 루트 노드인 4를 마지막 1과 교환
+    [1,3 | 4,5,10] --> 4 정렬 완료
+    정렬되지 않은 영역을 Heapify:
+    [3,1 | 4,5,10] --> 루트 노드인 3을 마지막 1과 교환
+    [1,3,4,5,10] --> 정렬완료
+    
+    Time Complexity:
+    - Best    : O(N log N)
+    - Average : O(N log N)
+    - Worst   : O(N log N)
+    
+    힙 정렬을 떠올릴 수 있는 상황:
+    - 최악 O(N log N) 정렬이 필요한 경우
+    - 추가 메모리를 적게 사용하는 정렬 문제
+    - K번째로 큰 값 구하기
+    - 우선순위가 가장 높은 작업 처리
+    - 가장 작은/큰 값 반복 추출
+    - 다익스트라 알고리즘
+    
 """
+
+def heapify(arr,n,i): # Heap의 조건
+    # n은 Heap으로 취급할 영역의 크기 // i는 heapify를 시작할 부모 노드 index
+    largest = i # 현재 노드를 가장 큰 값으로 가정
+    
+    left = 2*i+1 # 왼쪽 자식의 인덱스
+    right = 2*i+2 # 오른쪽 자식의 인덱스
+    
+    if left < n and arr[left] > arr[largest]: # 현재 노드를 왼쪽 자식과 비교
+        largest = left
+    
+    if right < n and arr[right] > arr[largest]: # 현재 노드를 오른쪽 자식과 비교
+        largest = right
+        
+    if largest != i: # 부모가 최댓값이 아니라면
+        arr[i], arr[largest] = arr[largest], arr[i] # Swap
+        
+        heapify(arr,n,largest)# 영향받은 하위 트리의 Heap 조건 복구
+        
+def heap_sort(arr):
+    n = len(arr) # n은 arr의 전체 길이
+    
+    # Step 1: Max Heap 만들기
+    for i in range(n//2-1,-1,-1):
+        heapify(arr,n,i)
+    
+    # Step 2: Extract Maximum
+    for i in range(n-1, 0 , -1):
+        
+        arr[0], arr[i] = arr[i], arr[0] # 최댓값을 끝으로 이동(정렬완료)
+        heapify(arr,i,0) # 남은 Heap 복구
+    
+    return arr
 
 # Counting Sort(계수 정렬) -------------------------------------------------------
 """

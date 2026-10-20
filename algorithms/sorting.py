@@ -344,5 +344,46 @@ def heap_sort(arr):
 
 # Counting Sort(계수 정렬) -------------------------------------------------------
 """
+    - 각 숫자가 몇 번 등장했는지 계산한 다음, 그 개수만큼 순서대로 배치하는 방식
+    ***각 숫자의 개수를 세고, 그 개수만큼 출력한다***
+    - 원소끼리 크기를 비교 X
+    - 정수 데이터에 적합
+    - 숫자의 범위가 작을 때 효율적
+    - 빈도 계산에 적합
+    
+    ex)
+    arr = [3,1,2,3,2,1,3]
+    Step 1: Counting
+    숫자 0 -> 0개
+    숫자 1 -> 2개
+    숫자 2 -> 2개
+    숫자 3 -> 3개
+    count = [0,2,2,3]
+    Step 2: Reconstruct
+    최종 어레이에
+    숫자 0을 0번 추가
+    숫자 1을 2번 추가
+    숫자 2를 2번 추가
+    숫자 3을 3번 추가
+    최종: [1,1,2,2,3,3,3]
 
 """
+def counting_sort(arr):
+    if not arr: # 만약 비어있는 배열이라면
+        return [] # 그대로 반환
+    
+    max_value = max(arr) # 현재 배열의 최댓값 확인
+    
+    count = [0] * (max_value + 1) # 빈도수를 저장할 배열 생성
+    
+    for num in arr: # arr에서 각 숫자마다 빈도 수 체크
+        count[num] += 1
+    
+    result = [] # 빈도 수로 정렬된 결과 arr
+    
+    for num in range(len(count)):
+        
+        for  _ in range(count[num]):
+            result.append(num)
+    
+    return result

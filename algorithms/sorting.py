@@ -366,6 +366,18 @@ def heap_sort(arr):
     숫자 2를 2번 추가
     숫자 3을 3번 추가
     최종: [1,1,2,2,3,3,3]
+    
+    Time Complexity:
+    - Best/Average/Worst: O(N + K)
+    - N: 원소의 개수
+    - K: 숫자 범위의 크기
+    
+    계수 정렬을 떠올릴 수 있는 상황:
+    - 정수 데이커가 주어지는 경우
+    - 숫자의 범위가 제한되어 있는 경우
+    - 중복되는 숫자가 많은 경우
+    - 각 숫자의 등장 횟수를 계산하는 문제
+    - 빈도 정보를 이용하여 정렬하는 문제
 
 """
 def counting_sort(arr):
@@ -374,14 +386,14 @@ def counting_sort(arr):
     
     max_value = max(arr) # 현재 배열의 최댓값 확인
     
-    count = [0] * (max_value + 1) # 빈도수를 저장할 배열 생성
+    count = [0] * (max_value + 1) # 빈도수를 저장할 배열 생성 // +1인 이유는 인덱스 시작점이 0이기 때문
     
-    for num in arr: # arr에서 각 숫자마다 빈도 수 체크
+    for num in arr: # arr에서 각 숫자마다 등장 횟수 체크
         count[num] += 1
     
     result = [] # 빈도 수로 정렬된 결과 arr
     
-    for num in range(len(count)):
+    for num in range(len(count)): # 숫자 종류마다 반복
         
         for  _ in range(count[num]):
             result.append(num)

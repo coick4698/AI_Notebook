@@ -45,8 +45,40 @@ def linear_search(arr,target):
 
 # Binary Search(이진 탐색) -------------------------------------------------------
 """
-
+    ***중간값과 비교하여 불필요한 절반을 제거한다***
+    - 정렬된 배열에서 탐색 범위를 절반씩 줄여 타겟을 찾는 알고리즘
+    - 배열이 정렬되어 있어야한다
+    - 탐색 범위를 절반씨 제거할 수 있다
+    
+    Time Complexity:
+    - Best    : O(1)
+    - Average : O(log N)
+    - Worst   : O(log N)
+    
+    Space Complexity:
+    - O(1)
+    
+    이진 탐색을 떠올릴 수 있는 상황:
+    - 정렬된 배열에서 특정 값을 찾는 경우
+    - 데이터 크기가 매우 큰 경우
+    - 특정 값의 존재 여부를 빠르게 확인하는 경우
+    - 특정 값의 첫 번째/ 마지막 위치를 찾는 경우
+    - Lower Bound / Upper Bound 문제
+    - 정답의 범위에서 조건을 만족하는 경계값을 찾는 문제(Parameter Search)
 """
+
+def binary_search(arr, target):
+    left = 0
+    right = len(arr) - 1
+    while left <= right:
+        mid = (left+right) // 2 # 전체의 중간값(짝수일 경우 왼쪽 선택)
+        
+        if arr[mid] == target: # 타겟 발견하면
+            return mid # 즉시 반환
+        elif arr[mid] < target: # 타겟이 오른쪽에 있다면
+            left = mid + 1 # left를 mid 한 칸 오른쪽으로
+        else: # 타겟이 왼쪽에 있다면
+            right = mid - 1 # right를 mid 한 칸 왼쪽으로
 
 # (완전탐색) -------------------------------------------------------------
 """

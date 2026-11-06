@@ -4,7 +4,7 @@
     대표 알고리즘/자료구조:
     - Linear Search(선형 탐색)
     - Binary Search(이진 탐색)
-    - 완전탐색
+    - Brute Force(완전탐색)
     - DFS(깊이 우선 탐색)
     - BFS(넓이 우선 탐색)
     
@@ -36,7 +36,7 @@
     - 배열을 한 번 순회하며 조건을 검사하는 경우
 """
 
-def linear_search(arr,target):
+def linear_search(arr, target):
     for i in range(len(arr)): # 리스트의 길이만큼 반복(모든 인덱스 참조)
         if arr[i] == target:
             return i # 타겟 반환
@@ -80,11 +80,167 @@ def binary_search(arr, target):
         else: # 타겟이 왼쪽에 있다면
             right = mid - 1 # right를 mid 한 칸 왼쪽으로
 
-# (완전탐색) -------------------------------------------------------------
+# Brute Force(완전탐색) -------------------------------------------------------------
 """
+    ***가능한 모든 경우를 확인해서 정답을 찾는 문제 해결 방식***
+    1. Basic Brute Force: 반복문으로 모든 경우 확인
+    - 모든 가능한 경우를 확인한다.
+    - 구현이 직관적이다.
+    - 정답을 빠뜨리지 않는 것이 중요하다.
+    - 경우의 수가 많으면 비효율적이다.
+    
+    Time Complexity:
+    - 문제의 따라 다름
+    
+    Brute Force를 떠올릴 수 있는 상황:
+    - 입력 데이터의 크기가 작은 경우
+    - 모든 경우를 확인해야 하는 경우
+    - 가능한 조합이나 순서를 검사하는 경우
+    - 다른 효율적인 알고리즘이 떠오르지 않는 경우
+    - 최적화 알고리즘의 정답 검증용 구현
     
     
+    
+    2. Permutation(순열): 순서를 고려하여 원소 선택
+    ***순서가 다르면 서로 다른 경우로 취급***
+    - 순서를 고려한다.
+    - 같은 위치의 원소를 중복 선택하지 않는다.
+    - 재귀를 이용하여 구현할 수 있다.
+    - 모든 순열을 생성하면 경우의 수가 빠르게 증가한다.
+    - 내장 프로그램: from itertools import permutations
+    
+    Time Complexity:
+    - 원소의 개수가 증가하면 경우의 수가 매우 빠르게 증가: O(N * P(N,R))
+    
+    Space Complexity:
+    - O(N + R * P(N,R))
+    
+    순열을 떠올릴 수 있는 상황:
+    - 원소의 순서가 중요한 경우
+    - 가능한 모든 배치를 확인해야 하는 경우
+    - 서로 다른 순서의 선택을 검사하는 경우
+    - 순서에 따라 결과가 달라지는 문제
+    - 모든 방문 순서를 탐색하는 문제
+    
+    
+    
+    3. Combination(조합): 순서와 관계없이 원소 선택
+    ***순서가 달라도 같은 원소를 선택했다면 같은 경우***
+    - 순서를 고려하지 않는다.
+    - 같은 원소를 중복 선택하지 않는다.
+    - 재귀적 구현
+    - from itertools import combinations
+    Time Complexity:
+    - O(R * C(N,R))
+    
+    Space Complexity:
+    - O(R + R * C(N, R))
+    
+    조합을 떠올릴 수 있는 상황:
+    - 순서가 중요하지 않은 경우
+    - 특정 개수의 원소를 선택할 경우
+    - 팀이나 그룹을 구성하는 경우
+    
+    
+    
+    4. Backtracking: 재귀 탐색과 가지치기
+    ***선택 -> 탐색 -> 조건 검사 -> 선택 취소***
+    - 현재 선택이 잘못되었다면 남은 경우를 탐색하지 않아도 되는가? 그렇다면 Backtracking 고려
+    
+    Time Complexity:
+    - 문제에 따라 다름
+    
+    Space Complexity:
+    - O(N * 2^N)
+    
+    백트래킹을 떠올릴 수 있는 상황:
+    - 가능한 선택지가 여러 개인 경우
+    - 선택을 취소하며 다른 경우를 탐색하는 경우
+    - 조건을 만족하지 않는 경로를 제거할 수 있는 겨웅
+    - 제약 조건이 있는 탐색 문제
+    -
 """
+def brute_force(arr, target):
+    result = [] # 이 배열에 타겟 저장
+    
+    for i in range(len(arr)): # 배열의 길이만큼 반복
+        for j in range(i+1, len(arr)): # 서로 다른 두 인덱스를 순서에 관계없이 한 번씩 선택할 때 자주 사용
+            if arr[i] + arr[j] == target:
+                result.append(arr[i], arr[j])
+    
+    return result
+
+
+
+def permutation(arr, r):
+    result = []
+    visited = [False] * len(arr) # 원소 선택 여부 기록; 배열의 길이만큼 False가 들어있는 배열
+    path = [] # 현재 선택한 순열
+    
+    def dfs():
+        # Base case: r개 선택 완료
+        if len(path) == r:
+            result.append(path.copy())
+            return
+        # 모든 원소 확인
+        for i in range(len(arr)):
+            if visited[i]: # 이미 선택한 원소라면 건너뛰기
+                continue
+            visited[i] = True
+            path.append(arr[i])
+            # 다음 원소 선택
+            dfs() # 재귀적
+            # 선택 취소 (Backtracking)
+            path.pop()
+            visited[i] = False
+    dfs()
+    
+    return result
+
+
+
+def combination(arr, r):
+    result = []
+    path = []
+    
+    def dfs(start):
+        # Base Case: r개 선택 완료
+        if len(path) == r:
+            result.append(path.copy())
+            return
+        # start index부터 선택
+        for i in range(start, len(arr)):
+            path.append(arr[i]) # 원소 선택
+            dfs(i + 1) # 다음 index부터 탐색
+            path.pop() # 선택 취소
+    dfs(0)
+    
+    return result
+
+
+def backtracking(arr, target):
+    result = []
+    path = []
+    
+    def dfs(start, current_sum):
+        # Base Case: 목표 합계 달성
+        if current_sum == target:
+            result.append(path.compy())
+            return
+        # Pruning: 목표 합계 초과
+        if current_sum > target:
+            return
+        # 가능한 원소 탐색
+        for i in range(start, len(arr)):
+            # 원소 선택
+            path.append(arr[i])
+            # 다음 단계 탐색
+            dfs(i + 1, current_sum + arr[i])
+            # 선택 취소
+            path.pop()
+    dfs(0,0)
+    
+    return result
 
 # DFS(깊이 우선 탐색) -------------------------------------------------------------
 """
